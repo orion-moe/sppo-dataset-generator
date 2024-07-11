@@ -1,0 +1,30 @@
+python3 generate.py \
+    --model /ors/models/Aura \
+    --maxlen 1024 \
+    --output_dir out/data \
+    --prompts /ors/datasets/ors-reasoning.parquet \
+    --pairs 1 \
+    --world_size 1 \
+    --frac_len 500 \
+    --data_frac 0
+
+python3 combine_generate.py \
+    --output_dir out/data \
+    --numgpu 1 \
+    --pairs 1
+
+python3 rank.py \
+    --model /ors/models/Aura \
+    --output_dir out/data \
+    --pairs 1 \
+    --numgpu 1 \
+    --frac_len 500 \
+    --data_frac 0 \
+    --gpu 0 \
+    --prompts /ors/datasets/ors-reasoning.parquet
+
+python3 compute_prob.py \
+    --output_dir out/data \
+    --pairs 1 \
+    --frac_len 500 \
+    --prompts /ors/datasets/ors-reasoning.parquet
